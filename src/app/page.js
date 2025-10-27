@@ -2,7 +2,7 @@
 
 import Hero from '@/components/Hero';
 import Link from 'next/link';
-import { Zap, Globe, Award, Shield, Gauge, Database, ChevronRight, Check } from 'lucide-react';
+import { Zap, Globe, Award, Shield, Gauge, Database, Cpu, Activity, ChevronRight, Check } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 
 function CountUpAnimation({ end, duration = 1500, suffix = '' }) {
@@ -51,34 +51,68 @@ function CountUpAnimation({ end, duration = 1500, suffix = '' }) {
 export default function HomePage() {
   const services = [
     { 
-      title: 'Automatisme',
-      description: 'Conception, fabrication et programmation d\'armoires de contrôle commande',
-      icon: Zap
+      title: 'Armoires de Contrôle Commande',
+      description: 'Conception, fabrication et programmation d\'armoires de contrôle commande et de tableaux de distribution (TGBT) conçus sur mesure pour chaque projet.',
+      icon: Cpu,
+      details: ['Design personnalisé', 'Fabrication complète', 'Programmation sur site'],
+      image: '/images/ARMOIRES/20230609_122012.jpg',
+      link: '/produits/armoires'
+    },
+    { 
+      title: 'Ingénierie du Système Électrique',
+      description: 'Ingénierie et intégration de l\'ensemble des équipements électriques : postes HTA/HTB, Balance of Plant (eBoP), distributions auxiliaires.',
+      icon: Shield,
+      details: ['Postes HTA/HTB', 'Balance of Plant', 'Systèmes auxiliaires'],
+      image: '/images/scada 1.png',
+      link: '/produits/systemeElectrique'
     },
     { 
       title: 'SCADA',
-      description: 'Systèmes de supervision ergonomiques avec cybersécurité renforcée',
-      icon: Globe
+      description: 'Développement de systèmes SCADA ergonomiques et conviviaux avec une esthétique soignée et des fonctionnalités complètes pour une opération simple et efficace.',
+      icon: Globe,
+      details: ['Interface ergonomique', 'Cybersécurité renforcée', 'Supervision temps réel'],
+      image: '/images/Speed governor hmi.png',
+      link: '/produits/scada'
     },
     { 
-      title: 'Data Visualisation',
-      description: 'Solutions IoT et BigData pour tableaux de bord dynamiques',
-      icon: Database
+      title: 'Data Visualisation et Reporting',
+      description: 'Solutions innovantes Industrie 4.0 intégrant IoT et BigData pour collecter, stocker, compiler et valoriser les données sous forme de tableaux de bord dynamiques.',
+      icon: Database,
+      details: ['Industrie 4.0', 'IoT & BigData', 'Tableaux de bord dynamiques'],
+      image: '/images/Encosyst Web Report.png',
+      link: '/produits/dataVisualisation'
     },
     { 
-      title: 'Régulations de vitesse',
-      description: 'Pour turbines Kaplan, Francis et Pelton - Conformes IEC',
-      icon: Gauge
+      title: 'Régulations de Vitesse',
+      description: 'Régulateurs de vitesse pour turbines Kaplan, Francis et Pelton. Adaptés aux nouveaux projets et à la modernisation. Conformes IEC-61362 et IEC-60308.',
+      icon: Gauge,
+      details: ['Tous types de turbines', 'Normes IEC', 'Groupes hydrauliques'],
+      image: '/images/Imagescontour/HPU Speed governor.png',
+      link: '/produits/regulationVitesse'
     },
     { 
-      title: 'Excitation statique',
-      description: 'Armoires d\'excitation jusqu\'à 1000Adc',
-      icon: Award
+      title: 'Armoires d\'Excitation Statique',
+      description: 'Fabrication de solutions d\'armoires d\'excitation statique jusqu\'à 1000Adc. Équipées de régulateurs de tension du marché ou embarqués dans un automate.',
+      icon: Award,
+      details: ['Jusqu\'à 1000Adc', 'Régulateurs intégrés', 'Haute précision'],
+      image: '/images/Imagescontour/REGUL VITESSE.png',
+      link: '/produits/armoiresExcitation'
     },
     { 
-      title: 'Ingénierie électrique',
-      description: 'Intégration complète HTA/HTB et Balance of Plant',
-      icon: Shield
+      title: 'Régulations de Tension',
+      description: 'Systèmes d\'excitation statique de haute précision pour une régulation optimale de la tension des alternateurs.',
+      icon: Activity,
+      details: ['Haute précision', 'Excitation brushless', 'Régulation optimale'],
+      image: '/images/arc 4.png',
+      link: '/produits/regulationTension'
+    },
+    { 
+      title: 'Instrumentation',
+      description: 'Fourniture, installation et mise en service de tout type d\'instrumentation : niveau, température, position, vitesse, vibration, débit en canal ouvert.',
+      icon: Zap,
+      details: ['Installation complète', 'Barrages et prises d\'eau', 'Large gamme de capteurs'],
+      image: '/images/20231211_074352.jpg',
+      link: '/produits/instrumentation'
     }
   ];
 
@@ -94,7 +128,6 @@ export default function HomePage() {
   return (
     <main className="pt-0">
       <Hero />
-
       {/* Section Chiffres Clés */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
@@ -108,7 +141,8 @@ export default function HomePage() {
               </h2>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-8">
+            {/* Première ligne - 2 éléments */}
+            <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto mb-8">
               <div className="text-center group">
                 <div className="bg-gradient-to-br from-orange-50 to-white p-8 rounded-2xl border-2 border-orange-200 group-hover:border-orange-400 transition-all shadow-lg group-hover:shadow-xl">
                   <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600 mb-3">
@@ -125,6 +159,10 @@ export default function HomePage() {
                   <div className="text-gray-600 font-semibold">Pays d'intervention</div>
                 </div>
               </div>
+            </div>
+
+            {/* Deuxième ligne - 3 éléments */}
+            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="text-center group">
                 <div className="bg-gradient-to-br from-orange-50 to-white p-8 rounded-2xl border-2 border-orange-200 group-hover:border-orange-400 transition-all shadow-lg group-hover:shadow-xl">
                   <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600 mb-3">
@@ -176,7 +214,7 @@ export default function HomePage() {
                   key={index}
                   className="flex items-start gap-3 bg-white p-4 rounded-xl border border-gray-200 hover:border-orange-300 transition-all shadow-sm hover:shadow-md"
                 >
-                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-10 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Check size={16} className="text-green-600" />
                   </div>
                   <p className="text-gray-700 font-medium">{item}</p>
@@ -187,8 +225,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+      {/* Services Grid - VERSION CLIQUABLE */}
+      <section id="solutions" className="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <span className="inline-block bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
@@ -202,36 +240,59 @@ export default function HomePage() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {services.map((service, index) => {
               const Icon = service.icon;
               return (
-                <div
+                <Link
                   key={index}
-                  className="group bg-white p-8 rounded-2xl border-2 border-gray-200 hover:border-orange-500 transition-all hover:shadow-2xl hover:-translate-y-2 duration-300"
+                  href={service.link}
+                  className="bg-white rounded-2xl border-2 border-gray-200 hover:border-orange-500 transition-all group shadow-lg hover:shadow-2xl overflow-hidden cursor-pointer"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg group-hover:shadow-xl">
-                    <Icon className="text-white" size={32} />
+                  {/* Image */}
+                  <div className="relative h-64 overflow-hidden bg-gray-900">
+                    <img 
+                      src={service.image} 
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                        <Icon className="text-white" size={28} />
+                      </div>
+                    </div>
+                    {/* Badge "En savoir plus" au hover */}
+                    <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="bg-white text-orange-600 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 shadow-xl">
+                        En savoir plus
+                        <ChevronRight size={16} />
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="font-bold text-xl text-gray-900 mb-3">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {service.description}
-                  </p>
-                </div>
+
+                  {/* Contenu */}
+                  <div className="p-8">
+                    <h3 className="font-bold text-2xl text-gray-900 mb-3 group-hover:text-orange-600 transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed mb-4">
+                      {service.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {service.details.map((detail, idx) => (
+                        <span 
+                          key={idx}
+                          className="text-xs bg-orange-50 border border-orange-200 text-orange-600 px-3 py-1 rounded-full font-medium"
+                        >
+                          {detail}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </Link>
               );
             })}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link 
-              href="/produits"
-              className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl text-lg"
-            >
-              Voir tous nos services
-              <ChevronRight size={20} />
-            </Link>
           </div>
         </div>
       </section>

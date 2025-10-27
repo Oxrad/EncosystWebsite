@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigation = [
     { name: 'Accueil', href: '/' },
-    { name: 'Produits et Services', href: '/produits' },
+    { name: 'Produits et Services', href: '/#solutions' },
     { name: 'Références', href: '/references' },
     { name: 'Contact', href: '/contact' }
   ];
@@ -18,14 +19,16 @@ export default function Navbar() {
     <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 fixed w-full top-0 z-50 shadow-sm">
       <nav className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-2xl">E</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">ENCOSYST</h1>
-              <p className="text-xs text-green-500 font-semibold">Energy Control System</p>
-            </div>
+          {/* Logo uniquement */}
+          <Link href="/" className="flex items-center">
+            <Image 
+              src="/images/logo 3000DPI.png"
+              alt="ENCOSYST - Energy Control System"
+              width={200}
+              height={50}
+              className="h-12 w-auto object-contain"
+              priority
+            />
           </Link>
 
           <div className="hidden md:flex space-x-2">
@@ -42,6 +45,7 @@ export default function Navbar() {
           <button
             className="md:hidden text-gray-900"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
