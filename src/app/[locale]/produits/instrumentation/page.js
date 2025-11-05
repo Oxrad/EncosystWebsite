@@ -38,6 +38,28 @@ export default function InstrumentationPage() {
     }
   ];
 
+  const miseEnService = [
+    {
+      etape: 'Étude',
+      description: 'Analyse des besoins et choix des capteurs',
+      duree: '1-2 semaines'
+    },
+    {
+      etape: 'Fourniture',
+      description: 'Approvisionnement et calibration',
+      duree: '3-6 semaines'
+    },
+    {
+      etape: 'Installation',
+      description: 'Montage et câblage sur site',
+      duree: '1-3 semaines'
+    },
+    {
+      etape: 'Commissioning',
+      description: 'Validation et mise en service',
+      duree: '1 semaine'
+    }
+  ];
 
   const essais = [
     'Vérification de la calibration',
@@ -220,6 +242,35 @@ export default function InstrumentationPage() {
         </div>
       </section>
 
+      {/* Mise en service */}
+      <section className="container mx-auto px-4 mb-16">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Processus de Réalisation
+          </h2>
+          <div className="grid md:grid-cols-4 gap-6">
+            {miseEnService.map((phase, index) => (
+              <div 
+                key={index}
+                className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-cyan-500 transition-all shadow-lg"
+              >
+                <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold mb-4">
+                  {index + 1}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  {phase.etape}
+                </h3>
+                <p className="text-gray-600 mb-3">
+                  {phase.description}
+                </p>
+                <div className="text-sm text-cyan-600 font-semibold">
+                  ⏱ {phase.duree}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="container mx-auto px-4">

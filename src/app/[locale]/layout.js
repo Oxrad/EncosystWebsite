@@ -1,8 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
-
-// PAS D'IMPORT CSS - Les styles seront ajoutés plus tard
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -20,12 +19,8 @@ export default async function LocaleLayout({ children, params }) {
     notFound();
   }
 
-  let messages;
-  try {
-    messages = (await import(`@/messages/${locale}.json`)).default;
-  } catch (error) {
-    notFound();
-  }
+  // Utiliser getMessages() de next-intl
+  const messages = await getMessages();
 
   return (
     <html lang={locale}>
@@ -42,7 +37,7 @@ export default async function LocaleLayout({ children, params }) {
         `}} />
       </head>
       <body>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>
       </body>
