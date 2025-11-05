@@ -1,21 +1,30 @@
+'use client';
+
 import Link from 'next/link';
+import Image from 'next/image';
 import { MapPin, Phone, Mail } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Footer() {
+  const t = useTranslations('footer');
+  const tNav = useTranslations('nav');
+  const tProducts = useTranslations('products');
+
   const navigation = [
-    { name: 'Accueil', href: '/' },
-    { name: 'Produits et Services', href: '/produits' },
-    { name: 'Références', href: '/references' },
-    { name: 'Contact', href: '/contact' }
+    { name: tNav('home'), href: '/' },
+    { name: tNav('expertise'), href: '/#solutions' },
+    { name: tNav('references'), href: '/references' },
+    { name: tNav('contact'), href: '/contact' }
   ];
 
   const services = [
-    'Automatisme',
-    'SCADA',
-    'Régulations de vitesse',
-    'Excitation statique',
-    'Data visualisation',
-    'Ingénierie électrique'
+    tProducts('automatisme.title'),
+    tProducts('ingenierie.title'),
+    tProducts('scada.title'),
+    tProducts('vitesse.title'),
+    tProducts('tension.title'),
+    tProducts('protections.title'),
+    tProducts('instrumentation.title')
   ];
 
   return (
@@ -24,28 +33,27 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Logo et description */}
           <div>
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-xl">E</span>
-              </div>
-              <div>
-                <h4 className="font-bold text-lg text-gray-900">ENCOSYST</h4>
-                <p className="text-xs text-green-500 font-semibold">Energy Control System</p>
-              </div>
+            <div className="mb-6">
+              <Image 
+                src="/images/logo 3000DPI.png"
+                alt="ENCOSYST - Energy Control System"
+                width={200}
+                height={50}
+                className="h-12 w-auto object-contain"
+                priority
+              />
             </div>
             <p className="text-gray-600 text-sm mb-4">
-              Spécialiste en systèmes de contrôle commande pour centrales hydroélectriques depuis 2011.
+              {t('description')}
             </p>
             <div className="flex gap-2">
               <span className="text-2xl">🇫🇷</span>
-              <span className="text-2xl">🌎</span>
-              <span className="text-2xl">🌍</span>
             </div>
           </div>
           
           {/* Navigation */}
           <div>
-            <h4 className="font-bold text-lg mb-6 text-gray-900">Navigation</h4>
+            <h4 className="font-bold text-lg mb-6 text-gray-900">{t('navigation')}</h4>
             <ul className="space-y-3 text-sm">
               {navigation.map((item) => (
                 <li key={item.name}>
@@ -59,7 +67,7 @@ export default function Footer() {
           
           {/* Services */}
           <div>
-            <h4 className="font-bold text-lg mb-6 text-gray-900">Nos Services</h4>
+            <h4 className="font-bold text-lg mb-6 text-gray-900">{t('expertise')}</h4>
             <ul className="space-y-3 text-sm text-gray-600">
               {services.map((service) => (
                 <li key={service}>{service}</li>
@@ -69,10 +77,10 @@ export default function Footer() {
           
           {/* Contact */}
           <div>
-            <h4 className="font-bold text-lg mb-6 text-gray-900">Contact</h4>
+            <h4 className="font-bold text-lg mb-6 text-gray-900">{t('contact')}</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-2 text-gray-600">
-                <MapPin size={16} className="text-green-500 mt-1 flex-shrink-0" />
+                <MapPin size={16} className="text-[#8DC63E] mt-1 flex-shrink-0" />
                 <div>
                   <div>13 Impasse Perbost</div>
                   <div>31800 Labarthe Inard</div>
@@ -86,12 +94,30 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail size={16} className="text-green-500 flex-shrink-0" />
-                <a href="mailto:contact@encosyst.com" className="text-green-600 hover:text-green-500 transition-colors font-medium">
-                  contact@encosyst.com
+                <Mail size={16} className="text-[#8DC63E] flex-shrink-0" />
+                <a href="mailto:contact@encosyst.fr" className="text-[#8DC63E] hover:text-[#7AB62F] transition-colors font-medium">
+                  contact@encosyst.fr
                 </a>
               </li>
             </ul>
+            
+            {/* Logo LinkedIn */}
+            <div className="mt-6">
+              <a 
+                href="https://www.linkedin.com/company/encosyst/posts/?feedView=all" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block hover:opacity-80 transition-opacity"
+              >
+                <Image 
+                  src="/imagesV2/logolinkendin.png"
+                  alt="Suivez-nous sur LinkedIn"
+                  width={120}
+                  height={40}
+                  className="h-10 w-auto object-contain"
+                />
+              </a>
+            </div>
           </div>
         </div>
         
@@ -101,7 +127,7 @@ export default function Footer() {
               &copy; 2025 ENCOSYST - SASU - RCS TOULOUSE B 529 905 697
             </p>
             <div className="flex gap-6 text-sm text-gray-600">
-              <span>Directeur : M. Laurent LOPES</span>
+              <span>{t('director')}</span>
             </div>
           </div>
         </div>
