@@ -1,3 +1,4 @@
+import './globals.css';  // Ajoutez cette ligne en premier
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -7,6 +8,7 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+// ... reste du code
 export const metadata = {
   title: 'ENCOSYST - Control Systems for Hydroelectric Power Plants',
   description: 'Specialist in control and command systems for hydroelectric power plants since 2011.',
