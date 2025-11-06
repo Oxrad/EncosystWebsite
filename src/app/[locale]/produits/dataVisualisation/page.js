@@ -1,70 +1,98 @@
 'use client';
 
-import { Database, Check, BarChart3, TrendingUp, ArrowLeft, Cloud } from 'lucide-react';
+import { Database, Check, BarChart3, TrendingUp, ArrowLeft, Cloud, Download } from 'lucide-react';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+function ImageCarousel({ images, alt }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  return (
+    <div className="relative h-full w-full">
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`${alt} - ${index + 1}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            index === currentIndex ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ))}
+      
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+      
+      {/* Indicateurs (dots) */}
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+          {images.map((_, index) => (
+            <div
+              key={index}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex 
+                  ? 'w-8 bg-white' 
+                  : 'w-2 bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function DataVisualisationPage() {
-  const specifications = [
-    'Solutions Industrie 4.0',
-    'Intégration IoT et BigData',
-    'Tableaux de bord dynamiques',
-    'Rapports automatisés personnalisables',
-    'API RESTful pour intégrations',
-    'Stockage cloud sécurisé',
-    'Analytics avancés',
-    'Export multi-formats (PDF, Excel, CSV)'
-  ];
-
-  const fonctionnalites = [
+  const fonctionnalitesClés = [
     {
       titre: 'Collecte de Données',
-      description: 'Acquisition automatique depuis tous vos équipements',
-      icon: Database
+      icon: Database,
+      description: 'Acquisition automatique et horodatée des données depuis tous vos installations, vigicrue, Météo France, etc.'
+    },
+    {
+      titre: 'Analyse',
+      icon: TrendingUp,
+      description: 'Transforme les données historisées en données consolidées et valorisées'
     },
     {
       titre: 'Visualisation',
-      description: 'Tableaux de bord interactifs et personnalisables',
-      icon: BarChart3
-    },
-    {
-      titre: 'Analyse Prédictive',
-      description: 'Intelligence artificielle pour anticiper les pannes',
-      icon: TrendingUp
+      icon: BarChart3,
+      description: 'Tableaux de bord interactifs et personnalisables'
     }
   ];
 
-  const miseEnService = [
-    {
-      etape: 'Audit',
-      description: 'Analyse des sources de données existantes',
-      duree: '1 semaine'
-    },
-    {
-      etape: 'Architecture',
-      description: 'Conception de la plateforme data',
-      duree: '2 semaines'
-    },
-    {
-      etape: 'Développement',
-      description: 'Création des dashboards et rapports',
-      duree: '4-6 semaines'
-    },
-    {
-      etape: 'Déploiement',
-      description: 'Mise en production et formation',
-      duree: '1-2 semaines'
-    }
+  const caracteristiquesTechniques = [
+    'Solutions Industrie 4.0',
+    'Intégration IoT et BigData',
+    'Tableaux de bord dynamiques',
+    'Stockage sur serveur local et / ou cloud',
+    'Accès sécurisé',
+    'Carnet de bord pour consigner les événements'
   ];
 
-  const rapports = [
+  const typesRapports = [
     'Rapports de production journaliers',
     'Analyses de performance mensuelle',
     'KPI temps réel',
     'Alertes automatiques',
     'Comparatifs historiques',
-    'Prévisions de maintenance',
-    'Rapports personnalisés',
-    'Export automatique'
+    'Journal d\'alarmes'
+  ];
+
+
+  const images = [
+  '/images/Encosyst Web Report.png',
+  '/imagesV2/Visualisation de données et rapports/2022-07-04 08_46_50-Productions - ENCOSyst Web Report et 12 pages de plus - Personnel – Microsoft​ E.png'
   ];
 
   return (
@@ -88,7 +116,7 @@ export default function DataVisualisationPage() {
             </div>
             <div>
               <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
-                Data Visualisation & Reporting
+                Visualisation de données et rapports
               </h1>
               <p className="text-xl text-gray-600 mt-2">
                 Industrie 4.0 - IoT - BigData
@@ -98,16 +126,11 @@ export default function DataVisualisationPage() {
         </div>
       </section>
 
-      {/* Image principale */}
+      {/* Carrousel d'images */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-            <img 
-              src="/images/Encosyst Web Report.png"
-              alt="Tableau de bord data"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <ImageCarousel images={images} alt="Visualisation de données" />
           </div>
         </div>
       </section>
@@ -116,35 +139,29 @@ export default function DataVisualisationPage() {
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white rounded-2xl border-2 border-gray-200 p-12 shadow-lg">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              L'Intelligence des Données au Service de Votre Performance
-            </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
-                Nos solutions de <strong>data visualisation</strong> transforment vos données brutes en informations exploitables. Grâce à l'intégration des technologies <strong>IoT et BigData</strong>, nous collectons, stockons et analysons toutes les données de vos installations.
+                Nos solutions de <strong>Visualisation de données</strong> transforment vos données brutes en informations exploitables. Grâce à l'intégration des technologies <strong>IoT et BigData</strong>, nous collectons, stockons et analysons toutes les données de vos installations, que ce soit les données de production (puissances, niveaux, températures, vitesse, état de fonctionnement du groupe, etc.) mais aussi les alarmes. Il est également possible d'enrichir cette base de données avec des informations provenant de Vigicrue ou de Météo France ou autre.
               </p>
               <p>
-                Les <strong>tableaux de bord dynamiques</strong> offrent une vue en temps réel de vos KPI essentiels : production énergétique, rendement, disponibilité, coûts d'exploitation, et bien plus. Chaque dashboard est personnalisable selon vos besoins.
+                Les <strong>tableaux de bord dynamiques</strong> offrent une vue en temps réel de vos KPI essentiels : production, disponibilité, facteur de charge, et bien plus. Chaque tableau est personnalisable selon vos besoins et inclus des fonctionnalités telles que le <strong>carnet de bord</strong> pour consigner les évènements. Cela facilite l'analyse des données, l'identification des tendances, la détection de dérive inhabituelle et contribue ainsi à optimiser l'efficacité de vos installations.
               </p>
               <p>
-                Notre plateforme <strong>Industrie 4.0</strong> intègre des algorithmes d'intelligence artificielle pour l'analyse prédictive. Anticipez les pannes, optimisez la maintenance et maximisez la disponibilité de vos équipements.
-              </p>
-              <p>
-                Les <strong>rapports automatisés</strong> sont générés selon votre périodicité (journalier, hebdomadaire, mensuel) et envoyés automatiquement par email aux destinataires configurés. Format PDF, Excel ou intégration API disponibles.
+                L'accès à cette plateforme s'effectue via un serveur web, garantissant une compatibilité avec tout type de support (PC, smartphone) et bénéficiant d'un système d'authentification sécurisé par mot de passe.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Fonctionnalités */}
+      {/* Fonctionnalités Clés */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
             Fonctionnalités Clés
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {fonctionnalites.map((fonc, index) => {
+            {fonctionnalitesClés.map((fonc, index) => {
               const Icon = fonc.icon;
               return (
                 <div 
@@ -154,7 +171,7 @@ export default function DataVisualisationPage() {
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4">
                     <Icon className="text-white" size={32} />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">
                     {fonc.titre}
                   </h3>
                   <p className="text-gray-600">
@@ -167,30 +184,32 @@ export default function DataVisualisationPage() {
         </div>
       </section>
 
-      {/* Spécifications et Rapports */}
+      {/* Caractéristiques et Types de Rapports */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">
+            {/* Caractéristiques Techniques */}
             <div className="bg-gradient-to-br from-purple-50 to-white rounded-2xl border-2 border-purple-200 p-8 shadow-lg">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Caractéristiques Techniques
               </h2>
               <ul className="space-y-3">
-                {specifications.map((spec, index) => (
+                {caracteristiquesTechniques.map((carac, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <Check className="text-green-600 flex-shrink-0 mt-1" size={20} />
-                    <span className="text-gray-700">{spec}</span>
+                    <span className="text-gray-700">{carac}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
+            {/* Types de Rapports */}
             <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl border-2 border-blue-200 p-8 shadow-lg">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Types de Rapports
               </h2>
               <ul className="space-y-3">
-                {rapports.map((rapport, index) => (
+                {typesRapports.map((rapport, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <Check className="text-purple-600 flex-shrink-0 mt-1" size={20} />
                     <span className="text-gray-700">{rapport}</span>
@@ -202,35 +221,7 @@ export default function DataVisualisationPage() {
         </div>
       </section>
 
-      {/* Mise en œuvre */}
-      <section className="container mx-auto px-4 mb-16">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Déploiement de la Solution
-          </h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            {miseEnService.map((phase, index) => (
-              <div 
-                key={index}
-                className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-purple-500 transition-all shadow-lg"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold mb-4">
-                  {index + 1}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {phase.etape}
-                </h3>
-                <p className="text-gray-600 mb-3">
-                  {phase.description}
-                </p>
-                <div className="text-sm text-purple-600 font-semibold">
-                  ⏱ {phase.duree}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+ 
 
       {/* CTA */}
       <section className="container mx-auto px-4">
@@ -254,3 +245,4 @@ export default function DataVisualisationPage() {
     </main>
   );
 }
+

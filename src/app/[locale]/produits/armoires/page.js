@@ -1,54 +1,114 @@
 'use client';
 
-import { Cpu, Check, Zap, Settings, Shield, ArrowLeft } from 'lucide-react';
+import { Brain, Check, Zap, Settings, Shield, ArrowLeft, Wrench } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { useState, useEffect } from 'react';
+
+function ImageCarousel({ images, alt }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  return (
+    <div className="relative h-full w-full">
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`${alt} - ${index + 1}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            index === currentIndex ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ))}
+      
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+      
+      {/* Indicateurs (dots) */}
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+          {images.map((_, index) => (
+            <div
+              key={index}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex 
+                  ? 'w-8 bg-white' 
+                  : 'w-2 bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function ArmoiresPage() {
   const specifications = [
-    'Conception sur mesure selon cahier des charges',
-    'Conformité normes IEC 61439',
-    'Intégration automates Siemens, Schneider, ABB',
-    'Protection IP54 à IP65',
-    'Câblage industriel haute qualité',
-    'Documentation technique complète'
+    'Intégration automates (Principalement Siemens Schneider)',
+    'Ecran tactiles',
+    'Dispositifs de protection et de mesure',
+    'Equipements de synchronisation',
+    'Régulateur de tension'
   ];
 
-  const miseEnService = [
-    {
-      etape: 'Préparation',
-      description: 'Vérification des schémas électriques et du câblage'
-    },
-    {
-      etape: 'Installation',
-      description: 'Montage et raccordement sur site des armoires'
-    },
-    {
-      etape: 'Tests',
-      description: 'Tests fonctionnels de tous les circuits'
-    },
-    {
-      etape: 'Mise en route',
-      description: 'Démarrage progressif et optimisation'
-    }
+  const fonctionnalites = [
+    'Gestion des démarrages automatique et en mode pas à pas',
+    'Gestion des séquences d\'arrêt normales ou rapide et d\'urgence en cas de défauts',
+    'Démarrages et arrêt automatiques en fonction des niveaux d\'eau et/ou prix spot de l\'énergie',
+    'Différents modes de conduite : Régulation de Niveau',
+    'Gestion de la puissance réactif : Q=f(U)',
+    'Limitations d\'ouverture, de puissance, de chute pour les centrales de basse chute',
+    'Mode de maintenance permettant le pilotage individuel des organes et moteurs afin de réaliser des tests en toute sécurité',
+    'Contrôle de la sécurité et sureté des prises d\'eau',
+    'Pilotage dégrilleurs et vannes'
   ];
 
-  const essais = [
-    'Test d\'isolement (1000V)',
-    'Mesure de continuité',
-    'Vérification des protections',
-    'Test de fonctionnement à vide',
-    'Test de fonctionnement en charge',
-    'Validation des séquences de sécurité',
-    'Test des communications',
-    'Essai thermique'
-  ];
+  const modernisation = {
+    raisons: [
+      'Obsolescence des équipements',
+      'Accroissement de l\'efficacité',
+      'Amélioration du facteur de charge',
+      'Réduction des temps d\'arrêt',
+      'Ajout de fonctionnalités',
+      'Automatisation de processus'
+    ],
+    benefices: [
+      'Réduction des coûts de production',
+      'Durée de vie prolongée',
+      'Fiabilité accrue',
+      'Efficacité étendue',
+      'Meilleure stabilité'
+    ],
+    etapes: [
+      {
+        titre: 'Diagnostics des équipements existants',
+        description: 'Analyse complète de l\'état actuel des systèmes'
+      },
+      {
+        titre: 'Analyse des différentes solutions',
+        description: 'Étude collaborative avec le client des options disponibles'
+      },
+      {
+        titre: 'Modernisation',
+        description: 'Mise à niveau partielle ou totale des équipements suivant la solution retenue'
+      }
+    ]
+  };
 
   const images = [
-    '/images/ARMOIRES/20230609_122012.jpg',
-    '/images/ARMOIRES/armoire2.jpg',
-    '/images/ARMOIRES/armoire3.jpg',
-    '/images/ARMOIRES/armoire4.jpg'
+  '/imagesV2/Armoires/Armoire_de_controle_comande_4.png',
+  '/imagesV2/Armoires/3 Panel de control central hidroeléctricaplanta .jpg',
+  '/imagesV2/Armoires/4 Armoire de controle comande 2.jpg'
   ];
 
   return (
@@ -69,7 +129,7 @@ export default function ArmoiresPage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl">
-              <Cpu className="text-white" size={40} />
+              <Brain className="text-white" size={40} />
             </div>
             <div>
               <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
@@ -83,16 +143,11 @@ export default function ArmoiresPage() {
         </div>
       </section>
 
-      {/* Image principale */}
+      {/* Carrousel d'images */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-            <img 
-              src="/images/ARMOIRES/20230609_122012.jpg"
-              alt="Armoire de contrôle commande"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <ImageCarousel images={images} alt="Armoires de contrôle commande" />
           </div>
         </div>
       </section>
@@ -102,30 +157,25 @@ export default function ArmoiresPage() {
         <div className="max-w-6xl mx-auto">
           <div className="bg-white rounded-2xl border-2 border-gray-200 p-12 shadow-lg">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              Description Complète
+              Solutions sur mesure pour le pilotage de vos installations
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
-                Nos <strong>armoires de contrôle commande</strong> sont conçues et fabriquées sur mesure pour répondre aux exigences spécifiques de chaque projet hydroélectrique. Chaque armoire est le résultat d'une ingénierie précise intégrant les dernières technologies d'automatisation.
+                Nos <strong>armoires de contrôle commande</strong> sont conçues et <strong>fabriquées sur mesure</strong> pour répondre aux exigences spécifiques de chaque projet hydroélectrique. Chaque armoire est le résultat d'une ingénierie dédiée intégrant les dernières technologies d'automatisation.
               </p>
               <p>
-                Nous assurons la <strong>conception complète</strong> depuis les études électriques jusqu'à la fabrication en atelier, en passant par la programmation des automates et la validation en usine avant livraison.
-              </p>
-              <p>
-                L'intégration peut inclure : automates programmables (Siemens, Schneider, ABB), variateurs de vitesse, systèmes de communication industrielle (Profibus, Modbus, Ethernet), dispositifs de protection et de mesure, alimentations redondantes, et systèmes de refroidissement adaptés.
-              </p>
-              <p>
-                Nos armoires sont conçues pour fonctionner dans des environnements industriels exigeants avec des températures de -20°C à +60°C et conformes aux normes internationales les plus strictes.
+                Nous assurons la <strong>conception complète</strong> depuis les études électriques jusqu'à la <strong>fabrication dans nos ateliers</strong>, en passant par la programmation des automates et interfaces graphiques ainsi que la validation en atelier avant livraison.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Spécifications techniques */}
+      {/* Spécifications techniques et Fonctionnalités */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">
+            {/* Spécifications Techniques */}
             <div className="bg-gradient-to-br from-orange-50 to-white rounded-2xl border-2 border-orange-200 p-8 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
                 <Settings className="text-orange-600" size={32} />
@@ -143,18 +193,19 @@ export default function ArmoiresPage() {
               </ul>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl border-2 border-green-200 p-8 shadow-lg">
+            {/* Fonctionnalités principales */}
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl border-2 border-blue-200 p-8 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
-                <Shield className="text-green-600" size={32} />
+                <Zap className="text-blue-600" size={32} />
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Tests et Essais
+                  Fonctionnalités principales
                 </h2>
               </div>
               <ul className="space-y-3">
-                {essais.map((essai, index) => (
+                {fonctionnalites.map((fonc, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <Zap className="text-orange-600 flex-shrink-0 mt-1" size={20} />
-                    <span className="text-gray-700">{essai}</span>
+                    <Check className="text-orange-600 flex-shrink-0 mt-1" size={20} />
+                    <span className="text-gray-700">{fonc}</span>
                   </li>
                 ))}
               </ul>
@@ -163,59 +214,109 @@ export default function ArmoiresPage() {
         </div>
       </section>
 
-      {/* Mise en service */}
+      {/* Projets de modernisation */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Processus de Mise en Service
-            </h2>
-            <p className="text-xl text-gray-600">
-              Un déploiement structuré en 4 phases pour garantir la qualité
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {miseEnService.map((phase, index) => (
-              <div 
-                key={index}
-                className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-orange-500 transition-all shadow-lg hover:shadow-xl"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold mb-4">
-                  {index + 1}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {phase.etape}
-                </h3>
-                <p className="text-gray-600 mb-3">
-                  {phase.description}
+          <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl border-2 border-green-200 p-12 shadow-lg">
+            <div className="flex items-center gap-3 mb-8">
+              <Wrench className="text-green-600" size={40} />
+              <h2 className="text-4xl font-bold text-gray-900">
+                Projets de modernisation
+              </h2>
+            </div>
+
+            <div className="space-y-8">
+              {/* Introduction */}
+              <div className="space-y-4 text-gray-700 leading-relaxed">
+                <p>
+                  La modernisation d'une centrale est généralement effectuée pour deux raisons essentielles : l'obsolescence des équipements ou un accroissement de l'efficacité afin d'améliorer le facteur de charge (réduction des temps d'arrêt, ajout de fonctionnalités, automatisation de processus).
                 </p>
-                <div className="text-sm text-orange-600 font-semibold">
-                  ⏱ {phase.duree}
+                <p>
+                  De manière générale, la rénovation des équipements de contrôle entraîne :
+                </p>
+              </div>
+
+              {/* Bénéfices */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">Bénéfices</h3>
+                  <ul className="space-y-3">
+                    {modernisation.benefices.map((benefice, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <Check className="text-green-600 flex-shrink-0 mt-1" size={20} />
+                        <span className="text-gray-700">{benefice}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">Raisons de moderniser</h3>
+                  <ul className="space-y-3">
+                    {modernisation.raisons.map((raison, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <Check className="text-orange-600 flex-shrink-0 mt-1" size={20} />
+                        <span className="text-gray-700">{raison}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            ))}
+
+              {/* Étapes */}
+              
+              <div className="mt-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  Une modernisation est réalisée en trois étapes
+                </h3>
+                <div className="grid md:grid-cols-3 gap-6">
+                  
+                  {modernisation.etapes.map((etape, index) => (
+                    <div 
+                      key={index}
+                      className="bg-white rounded-xl border-2 border-green-300 p-6 hover:border-green-500 transition-all shadow-md"
+                    >
+                      <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold mb-4">
+                        {index + 1}
+                      </div>
+                      <h4 className="text-lg font-bold text-gray-900 mb-2">
+                        {etape.titre}
+                      </h4>
+                      <p className="text-gray-600">
+                        {etape.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+         
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Galerie d'images */}
+
+
+      {/* Nouveaux projets */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Galerie Photos
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {images.map((image, index) => (
-              <div key={index} className="relative h-80 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group">
-                <img 
-                  src={image}
-                  alt={`Armoire ${index + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-            ))}
+          <div className="bg-white rounded-2xl border-2 border-gray-200 p-12 shadow-lg">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              Nouveaux projets
+            </h2>
+            <div className="space-y-4 text-gray-700 leading-relaxed">
+              <p>
+                Le système de contrôle commande et plus généralement tous les équipements électriques sont souvent peu considérés lors de la réalisation d'un projet. Les équipements de production (turbines et alternateurs) captent tout l'attention pour diverses raisons (cout plus élevés, rendements, etc.).
+              </p>
+              <p>
+                Ces systèmes sont pourtant un <strong>facteur essentiel dans la fiabilité et la productivité</strong> d'une installation et ont un impact direct sur la rentabilité d'un projet.
+              </p>
+              <p>
+                Une <strong>intégration optimale du système de contrôle commande</strong> aux équipements de production assure une facilité d'exploitation quotidienne de l'installation ainsi qu'une maintenance simplifiée, contribuant ainsi à réduire les coûts d'exploitation.
+              </p>
+            </div>
           </div>
+
         </div>
       </section>
 
@@ -241,3 +342,4 @@ export default function ArmoiresPage() {
     </main>
   );
 }
+

@@ -1,72 +1,114 @@
 'use client';
 
-import { Gauge, Check, Zap, Cog, ArrowLeft, Activity } from 'lucide-react';
+import { Gauge, Check, Zap, Wrench, ArrowLeft, Settings, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+function ImageCarousel({ images, alt }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  return (
+    <div className="relative h-full w-full">
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`${alt} - ${index + 1}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            index === currentIndex ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ))}
+      
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+      
+      {/* Indicateurs (dots) */}
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+          {images.map((_, index) => (
+            <div
+              key={index}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex 
+                  ? 'w-8 bg-white' 
+                  : 'w-2 bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function RegulationVitessePage() {
-  const specifications = [
-    'Compatible turbines Kaplan, Francis, Pelton',
-    'Conforme IEC-61362 et IEC-60308',
-    'Régulation primaire et secondaire',
-    'Développé sur automate industriel',
-    'Synchronisation automatique',
-    'Protection contre l\'emballement',
-    'Interface opérateur intuitive',
-    'Redondance disponible'
+  const fonctionnalites = [
+    'Groupe îloté ou connecté réseau',
+    'Gestion des états de démarrage, synchronisation et marche en réseau de la turbine',
+    'Contrôle de charge pour le mode de fonctionnement autonome',
+    'Pré-synchronisation automatique',
+    'Démarrage sans courant',
+    'Ouverture limiteur de vitesse',
+    'Contrôle de charge avec 4 modes de réglage primaire :',
+    '- P=cst',
+    '- Isobare',
+    '- Débit',
+    '- PxH=cst',
+    'Optimisation de prise de charge',
+    'Contrôle ouverture maxi en fonction de la hauteur de chute pour éviter les zones de régulation',
+    'Mode manuel',
+    'Régulateur de niveau d\'amont',
+    'Échange d\'informations avec Éditeurs SCADA (Modbus RTU, TCP ou OPC UA)',
+    'Contrôle des relais et des entrées TOR',
+    'Carte de surveillance (WDT)',
+    'Contrôle de la régulation (INZRV)'
   ];
 
-  const typesTurbines = [
-    {
-      type: 'Kaplan',
-      description: 'Régulation combinée pales et débit avec synchronisation',
-      puissance: '100 kW - 200 MW'
-    },
-    {
-      type: 'Francis',
-      description: 'Régulation du distributeur avec compensation de chute',
-      puissance: '500 kW - 800 MW'
-    },
-    {
-      type: 'Pelton',
-      description: 'Régulation multi-injecteurs avec déflecteur',
-      puissance: '1 MW - 400 MW'
-    }
+  const sequences = [
+    'Démarrage seul sans courant (dépin d\'équilibrage des couvertes et ouverture des organes lents si besoin)',
+    'Synchronisation automatique et prise de charge',
+    'Passage en mode réseau',
+    'Limiteur de puissance',
+    'Marge de puissance',
+    'Stop d\'urgence par fermeture rapide des vannages',
+    'Fonction PxHN optimiseur des capacités du groupe'
   ];
 
-  const miseEnService = [
-    {
-      etape: 'Étude',
-      description: 'Analyse des caractéristiques de la turbine',
-      duree: '1-2 semaines'
-    },
-    {
-      etape: 'Programmation',
-      description: 'Développement et simulation du régulateur',
-      duree: '3-4 semaines'
-    },
-    {
-      etape: 'Tests FAT',
-      description: 'Tests en usine avec groupe hydraulique',
-      duree: '1 semaine'
-    },
-    {
-      etape: 'Mise en route',
-      description: 'Réglages fin sur site et optimisation',
-      duree: '1-2 semaines'
-    }
+  const piecesReserves = [
+    'Serveur Fournir le régulateur primaire et secondaire (interface informatique)',
+    'Robinets d\'isolement du distributeur et des pales',
   ];
 
-  const essais = [
-    'Test du groupe hydraulique',
-    'Vérification des capteurs de position',
-    'Test des servovalves',
-    'Calibration des mesures',
-    'Test de synchronisation',
-    'Essai de montée en charge',
-    'Test protection emballement',
-    'Validation des temps de réponse',
-    'Test de régulation îlotée',
-    'Essai de délestage'
+  const caracteristiques = [
+    'Compatibilité turbines Kaplan, Francis, Pelton',
+    'Nouveaux projets et modernisation',
+    'Conforme aux normes IEC 61362 et IEEE 125',
+    'Régulation numérique haute précision',
+    'Interface homme-machine intuitive',
+    'Groupes hydrauliques sur mesure'
+  ];
+
+  const groupesHydrauliques = [
+    'Conception sur mesure selon vos besoins',
+    'Dimensionnement adapté à la turbine',
+    'Composants hydrauliques de qualité',
+    'Tests FAT complets en usine'
+  ];
+
+  const images = [
+    '/images/Imagescontour/HPU Speed governor.png',
+    '/images/20251024_162912.jpg'
   ];
 
   return (
@@ -85,123 +127,133 @@ export default function RegulationVitessePage() {
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
+            <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-xl">
               <Gauge className="text-white" size={40} />
             </div>
             <div>
               <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
-                Régulations de Vitesse
+                Régulation de Vitesse
               </h1>
               <p className="text-xl text-gray-600 mt-2">
-                Pour turbines Kaplan, Francis et Pelton
+                Régulateurs pour turbines Kaplan, Francis et Pelton
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Image principale */}
+      {/* Carrousel d'images */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-            <img 
-              src="/images/Imagescontour/HPU Speed governor.png"
-              alt="Régulateur de vitesse"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <ImageCarousel images={images} alt="Régulation de vitesse" />
           </div>
         </div>
       </section>
 
-      {/* Description */}
+      {/* Description principale */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white rounded-2xl border-2 border-gray-200 p-12 shadow-lg">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              Régulation Précise et Fiable
+              Régulation de vitesse
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
-                Nos <strong>régulateurs de vitesse</strong> sont conçus pour assurer une régulation précise et stable de tous types de turbines hydrauliques : Kaplan, Francis et Pelton. Développés sur automate industriel robuste, ils garantissent une fiabilité maximale.
+                Nos systèmes de <strong>régulation automatique</strong> assurent une conduite de l'agrégation automatisée, conçue pour s'adapter à tous types de turbines: <strong>Kaplan, Francis et Pelton</strong>. Ces solutions sont pensées pour optimiser les performances et garantir un fonctionnement stable, tant en mode îloté que connecté au réseau. Tous les automates utilisent un algorithme de régulation selon la méthode <strong>PID</strong>, conforme aux normes <strong>IEC 61362</strong> et <strong>IEEE 125</strong>.
               </p>
               <p>
-                Conformes aux normes <strong>IEC-61362</strong> (systèmes de régulation de vitesse pour turbines hydrauliques) et <strong>IEC-60308</strong> (groupes hydrauliques pour régulateurs), nos régulateurs intègrent toutes les fonctions de sécurité requises.
-              </p>
-              <p>
-                La <strong>régulation primaire</strong> assure le maintien de la fréquence avec une précision de ±0.1% et un temps de réponse optimal. La <strong>régulation secondaire</strong> permet la participation au réglage réseau selon les consignes de l'opérateur.
-              </p>
-              <p>
-                Adaptés aussi bien aux <strong>nouveaux projets</strong> qu'à la <strong>modernisation</strong> d'installations existantes, nos régulateurs peuvent remplacer d'anciens systèmes analogiques tout en conservant le groupe hydraulique existant si celui-ci est en bon état.
+                Basé sur une technologie <strong>PLC</strong> (Contrôle programmable industriel), notre régulateur garantit une grande réactivité dans la gestion des fluctuations de charge et du réseau, tout en offrant la robustesse nécessaire pour un fonctionnement continu dans des environnements industriels exigeants.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Types de turbines */}
+      {/* Groupes hydrauliques */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Compatibilité Turbines
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {typesTurbines.map((turbine, index) => (
-              <div 
-                key={index}
-                className="bg-white rounded-xl border-2 border-gray-200 p-8 hover:border-indigo-500 transition-all shadow-lg hover:shadow-xl"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4">
-                  <Cog className="text-white" size={32} />
+          <div className="bg-white rounded-2xl border-2 border-gray-200 p-12 shadow-lg">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              Groupes hydrauliques
+            </h2>
+            <div className="space-y-4 text-gray-700 leading-relaxed mb-6">
+              <p>
+                Chez Encosyst, nous offrons également la conception et la fabrication sur-mesure de groupes hydrauliques d'asservissement des différents organes mobiles.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {groupesHydrauliques.map((item, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <Check className="text-green-600 flex-shrink-0 mt-1" size={20} />
+                  <span className="text-gray-700">{item}</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  {turbine.type}
-                </h3>
-                <p className="text-gray-600 mb-3">
-                  {turbine.description}
-                </p>
-                <div className="text-sm text-indigo-600 font-semibold">
-                  ⚡ {turbine.puissance}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Spécifications et Essais */}
+      {/* Pièces de Réserve */}
+      <section className="container mx-auto px-4 mb-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-gradient-to-br from-orange-50 to-white rounded-2xl border-2 border-orange-200 p-8 shadow-lg">
+            <div className="flex items-center gap-3 mb-6">
+              <Wrench size={32} className="text-orange-600" />
+              <h2 className="text-2xl font-bold text-gray-900">
+                Pièces Réserve
+              </h2>
+            </div>
+            <p className="text-gray-700 mb-4">
+              Nous proposons également un lot de pièces de réserve constitué d'un serveur permettant de s'affranchir des pannes.
+            </p>
+            <ul className="space-y-3">
+              {piecesReserves.map((piece, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <Check className="text-orange-600 flex-shrink-0 mt-1" size={20} />
+                  <span className="text-gray-700">{piece}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Fonctionnalités et Séquences */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-gradient-to-br from-indigo-50 to-white rounded-2xl border-2 border-indigo-200 p-8 shadow-lg">
+            {/* Fonctionnalités */}
+            <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl border-2 border-green-200 p-8 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
-                <Activity size={32} className="text-indigo-600" />
+                <Settings size={32} className="text-green-600" />
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Spécifications
+                  Fonctionnalités
                 </h2>
               </div>
               <ul className="space-y-3">
-                {specifications.map((spec, index) => (
+                {fonctionnalites.map((fonc, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <Check className="text-green-600 flex-shrink-0 mt-1" size={20} />
-                    <span className="text-gray-700">{spec}</span>
+                    <span className="text-gray-700">{fonc}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-white rounded-2xl border-2 border-orange-200 p-8 shadow-lg">
+            {/* Séquences et essais */}
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl border-2 border-blue-200 p-8 shadow-lg">
               <div className="flex items-center gap-3 mb-6">
-                <Zap size={32} className="text-orange-600" />
+                <AlertCircle size={32} className="text-blue-600" />
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Programme d'Essais
+                  Séquences et essais
                 </h2>
               </div>
               <ul className="space-y-3">
-                {essais.map((essai, index) => (
+                {sequences.map((seq, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <Check className="text-indigo-600 flex-shrink-0 mt-1" size={20} />
-                    <span className="text-gray-700">{essai}</span>
+                    <Check className="text-blue-600 flex-shrink-0 mt-1" size={20} />
+                    <span className="text-gray-700">{seq}</span>
                   </li>
                 ))}
               </ul>
@@ -210,32 +262,21 @@ export default function RegulationVitessePage() {
         </div>
       </section>
 
-      {/* Mise en service */}
+      {/* Caractéristiques */}
       <section className="container mx-auto px-4 mb-16">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Processus de Déploiement
+            Caractéristiques Techniques
           </h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            {miseEnService.map((phase, index) => (
-              <div 
-                key={index}
-                className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-indigo-500 transition-all shadow-lg"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold mb-4">
-                  {index + 1}
+          <div className="bg-white rounded-xl border-2 border-gray-200 p-8 shadow-lg">
+            <div className="grid md:grid-cols-2 gap-6">
+              {caracteristiques.map((carac, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <Check className="text-green-600 flex-shrink-0 mt-1" size={20} />
+                  <span className="text-gray-700 font-medium">{carac}</span>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {phase.etape}
-                </h3>
-                <p className="text-gray-600 mb-3">
-                  {phase.description}
-                </p>
-                <div className="text-sm text-indigo-600 font-semibold">
-                  ⏱ {phase.duree}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -243,18 +284,18 @@ export default function RegulationVitessePage() {
       {/* CTA */}
       <section className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl p-12 text-center shadow-2xl">
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-12 text-center shadow-2xl">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Modernisez votre régulation de vitesse
+              Besoin d'un régulateur de vitesse ?
             </h2>
-            <p className="text-xl text-indigo-50 mb-8">
-              Améliorez la performance et la fiabilité de votre turbine
+            <p className="text-xl text-green-50 mb-8">
+              Contactez-nous pour une solution adaptée à votre turbine
             </p>
             <Link 
               href="/contact"
-              className="inline-block bg-white text-indigo-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-xl hover:scale-105"
+              className="inline-block bg-white text-green-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-xl hover:scale-105"
             >
-              Demander une étude
+              Obtenir un devis
             </Link>
           </div>
         </div>
@@ -262,3 +303,4 @@ export default function RegulationVitessePage() {
     </main>
   );
 }
+

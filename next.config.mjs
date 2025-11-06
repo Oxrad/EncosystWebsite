@@ -1,14 +1,8 @@
-import withNextIntl from 'next-intl/plugin';
+import createNextIntlPlugin from 'next-intl/plugin';
 
-const withNextIntlConfig = withNextIntl('./i18n.js');
+const withNextIntl = createNextIntlPlugin('./i18n.js');
 
-const nextConfig = {
-  // Gardez vos configurations existantes
-  reactStrictMode: true,
-  images: {
-    domains: ['example.com'],
-  },
-  // ... autres configs
-};
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
 
-export default withNextIntlConfig(nextConfig);
+export default withNextIntl(nextConfig);
